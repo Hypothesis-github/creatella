@@ -1,74 +1,16 @@
 import React from 'react'
 import { getAscii } from '../service/getData'
 import { SomeContext } from './index'
-import 'antd/dist/antd.css'
-import { Table, Button , Typography  } from 'antd';
-import { Row, Col } from 'antd';
+import './css/main.css'
+import { Helpers } from '../service/helpers'
+import Spinner from '../utils/Spinner'
+
+
 
 export default () => {
     const { state, dispatch } = React.useContext(SomeContext)
-    const columns = [
-        {
-            title: 'ID',
-            dataIndex: 'id',
-            defaultSortOrder: 'descend',
-            //   sorter: (a, b) => a.id - b.id,
-            onHeaderCell: (column) => {
-                return {
-                    onClick: () => {
-                        console.log(column);
-                    }
-                };
-            }
-        },
-        {
-            title: 'Size',
-            dataIndex: 'size',
-            defaultSortOrder: 'descend',
-            sorter: (a, b) => a.size - b.size,
-        },
-        {
-            title: 'Face',
-            dataIndex: 'face',
-            render: (face, record) => (
-                <Typography.Text style={{ fontSize: record.size }}>
-                  {face}
-                </Typography.Text>
-              ),
-            onHeaderCell: (column) => {
-                return {
-                    onClick: () => {
-                        console.log(column);
-                    }
-                };
-            }
-
-        },
-        {
-            title: 'Date',
-            dataIndex: 'date',
-            onHeaderCell: (column) => {
-                return {
-                    onClick: () => {
-                        console.log(column);
-                    }
-                };
-            }
-
-        },
-        {
-            title: 'Price',
-            dataIndex: 'price',
-            defaultSortOrder: 'descend',
-            sorter: (a, b) => a.price - b.price,
-        },
-    ];
 
 
-
-    function onChange(pagination, filters, sorter) {
-        console.log('params', pagination, filters, sorter);
-    }
 
 
     // React.useEffect(() => {
@@ -82,37 +24,68 @@ export default () => {
     // }) , [fData];
 
     React.useEffect(() => {
-        getAscii(1, 11, dispatch)
-        // console.log(serverItems)
+        getAscii(1, 22, dispatch)
+
         // setfData(getAscii('2','3'))
         // dispatch({type : 'LoadItems' , serverItems})
     }, [])
 
+    const addRender = (id) => {
+        return (
+            <tr>
+                <td>
+                    <img src={`/ads/?r=6`} />
+                </td>
+            </tr>
+        )
+    }
 
+    const renderTable = () => {
+        return (
+            <table className="container">
+                <thead>
+                    <tr>
+                        <th onClick={() => console.log('ID clicked')} ><h1>ID</h1></th>
+                        <th><h1>Size</h1></th>
+                        <th><h1>Face</h1></th>
+                        <th><h1>Price</h1></th>
+                        <th><h1>Date</h1></th>
+                    </tr>
+                </thead>
+                {
+                    state.data.map((r, i) => {
+                        let tnow = new Date().getTime()
+                        let tdate = new Date(r.date).getTime()
+                        let currencyString = "£" + (r.price / 100).toFixed(2);
+                        return (
+
+                            <tbody key={r.id}>
+                                {i !== 0 && i % 20 === 0 && addRender(r.id)}
+
+                                <tr>
+                                    <td>{r.id}</td>
+                                    <td>{r.size}</td>
+                                    <td style={{ fontSize: r.size }}>{r.face}</td>
+                                    <td>{currencyString}</td>
+                                    <td>{
+                                        Helpers.daysDiff(tnow, tdate, r.date)
+                                    }</td>
+                                </tr>
+
+                            </tbody>
+
+                        )
+                    })
+                }
+            </table>
+        )
+    }
 
 
     return (
+
         <>
-            <Row type='flex' align='middle' >
-
-                <Col span={24} >
-                    <Table columns={columns} dataSource={state.data} onChange={onChange} pagination={false} rowKey={record => record.id} />
-                    {console.log(state.data)}
-
-                    {/* <button onClick={() => dispatch({type : 'loadingFalse' })}> click </button> */}
-
-                    {/* {
-                    <div style={{ justifyContent: 'center', verticalAlign: 'center' }} >
-                        <Button type="dashed">Dashed</Button>
-                        {console.log(state.data)}
-                        <h1>Hello, world!v</h1>
-                        <button onClick={() => dispatch({ type: "+" })}> click </button>
-                    </div> } */}
-                </Col>
-
-            </Row>
-
-
+            {state.loading == false ? (renderTable()) : <Spinner />}
         </>
     )
 }
