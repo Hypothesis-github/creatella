@@ -4,16 +4,17 @@ export const initialState = {
     sort: '',
     data: [],
     preload: [],
-    more: true
+    more: false,
+    page : 1
 }
 
 export const reducer = (state , action) => {
 
     switch (action.type) {
-        case "+":
-        return { state , count : (state.count + 1)}
+        case "more":
+        return { ...state , more : true}
         case "preLoadItems":
-        return {...state, data : [...state.data, ...action.pre]}
+        return {...state ,page : (state.page + 1) , data : [...state.data, ...action.pre] , more : false }
         case "loadingTrue":
         return { ...state , loading : true}
         case "loadingFalse":

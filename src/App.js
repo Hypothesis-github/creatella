@@ -3,32 +3,35 @@ import { getAscii } from '../service/getData'
 import { SomeContext } from './index'
 import './css/main.css'
 import { Helpers } from '../service/helpers'
-import Spinner from '../utils/Spinner'
+
 
 
 
 export default () => {
     const { state, dispatch } = React.useContext(SomeContext)
 
-
-
-
-    // React.useEffect(() => {
-    //     fetch('http://localhost:3000/products')
-    //         .then(res => res.json())
-    //         .then((data) => {
-    //             setfData(data)
-    //             console.log(data)
-    //         })
-    //         .catch(console.log)
-    // }) , [fData];
+    React.useEffect(() => {
+        getAscii(1, 21, dispatch)
+    }, [])
 
     React.useEffect(() => {
-        getAscii(1, 22, dispatch)
 
-        // setfData(getAscii('2','3'))
-        // dispatch({type : 'LoadItems' , serverItems})
-    }, [])
+        window.addEventListener('scroll', () => {
+
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && state.more == false) {
+                getAscii(state.page, 21, dispatch)
+
+                // console.log("you're at the bottom of the page", state.page)
+                // getAscii(state.page, 22, dispatch)
+                //show loading spinner and make fetch request to api
+            }
+
+        })
+
+
+    }, [state])
+
+
 
     const addRender = (id) => {
         return (
@@ -37,10 +40,21 @@ export default () => {
                     <img src={`/ads/?r=6`} />
                 </td>
             </tr>
+
         )
     }
 
-    const renderTable = () => {
+    const hasMore = () => {
+        return (
+            <tr>
+            <td>
+                {state.more == true  ? 'LOADING MORE': null}
+                </td> 
+            </tr>
+        )
+    }
+
+    const Table = () => {
         return (
             <table className="container">
                 <thead>
@@ -61,7 +75,7 @@ export default () => {
 
                             <tbody key={r.id}>
                                 {i !== 0 && i % 20 === 0 && addRender(r.id)}
-
+                                {i !== 0 && i % 20 === 0 && hasMore()}
                                 <tr>
                                     <td>{r.id}</td>
                                     <td>{r.size}</td>
@@ -71,7 +85,7 @@ export default () => {
                                         Helpers.daysDiff(tnow, tdate, r.date)
                                     }</td>
                                 </tr>
-
+                                
                             </tbody>
 
                         )
@@ -85,7 +99,13 @@ export default () => {
     return (
 
         <>
-            {state.loading == false ? (renderTable()) : <Spinner />}
+            {/* {state.loading ? <Spinner /> : (renderTable()) } */}
+            {Table()}
         </>
     )
 }
+
+
+
+
+
