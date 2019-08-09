@@ -8,7 +8,9 @@ export const getAscii = async (page, limit = '10' , dispatch ) => {
   // }
   if (cachePage === page || cachePage > page) {
     return null
-  }
+  }else{
+    console.log('get data is running with page ', page)
+  
  
   // dispatch({type : 'more' })
   try {
@@ -31,12 +33,12 @@ export const getAscii = async (page, limit = '10' , dispatch ) => {
   } catch (error) {
     console.log(error)
   }
-  console.log('cache' ,cachePage)
+  // console.log('cache' ,cachePage)
   cachePage = page;
-  console.log('page' ,page)
+  // console.log('page' ,page)
   // const data = await response.json();
   // cacheAPI = { page, limit, data };
   // console.log(data)
   // return data;
-
+}
 }

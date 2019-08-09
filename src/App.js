@@ -1,35 +1,68 @@
-import React from 'react'
+import React, { useState ,useEffect } from 'react'
 import { getAscii } from '../service/getData'
 import { SomeContext } from './index'
 import './css/main.css'
 import { Helpers } from '../service/helpers'
-
+import Spinner from '../utils/Spinner'
 
 
 
 export default () => {
     const { state, dispatch } = React.useContext(SomeContext)
+    const [isFetching, setIsFetching] = useState(false);
 
     React.useEffect(() => {
         getAscii(1, 21, dispatch)
+
     }, [])
 
-    React.useEffect(() => {
+        React.useEffect(() => {
 
-        window.addEventListener('scroll', () => {
+            window.addEventListener('scroll', onScroll)
 
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && state.more == false) {
+        },[state , onScroll])
+
+       const onScroll = () => {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight  && state.more == false && state.loading ==false  ) {
                 getAscii(state.page, 21, dispatch)
-
-                // console.log("you're at the bottom of the page", state.page)
-                // getAscii(state.page, 22, dispatch)
-                //show loading spinner and make fetch request to api
             }
+        }
 
-        })
 
 
-    }, [state])
+
+
+    // useEffect(() => {
+    //     getAscii(1, 21, dispatch)
+    //     window.addEventListener('scroll', handleScroll);
+    //     return () => window.removeEventListener('scroll', handleScroll);
+    // }, []);
+
+    // function handleScroll() {
+    //     if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isFetching) return;
+    //     setIsFetching(true);
+    // }
+
+    // useEffect(() => {
+    //     if (!isFetching) return;
+    //     fetchMoreListItems();
+    // }, [isFetching , state]);
+
+
+
+    // function fetchMoreListItems() {
+    //     console.log('fetchMoreListItems runs')
+    //     setTimeout(() => {
+    //         getAscii(state.page, 21, dispatch);
+    //         setIsFetching(false);
+    //     }, 500);
+    // }
+
+
+
+
+
+
 
 
 
@@ -39,20 +72,13 @@ export default () => {
                 <td>
                     <img src={`/ads/?r=6`} />
                 </td>
+                {/* {hasMore()} */}
             </tr>
 
         )
     }
 
-    const hasMore = () => {
-        return (
-            <tr>
-            <td>
-                {state.more == true  ? 'LOADING MORE': null}
-                </td> 
-            </tr>
-        )
-    }
+    const HasMore = () => (state.more = true ? <tr><td>loading</td></tr> : <tr><td>NOT</td></tr>)
 
     const Table = () => {
         return (
@@ -75,7 +101,7 @@ export default () => {
 
                             <tbody key={r.id}>
                                 {i !== 0 && i % 20 === 0 && addRender(r.id)}
-                                {i !== 0 && i % 20 === 0 && hasMore()}
+                                {/* {i !== 0 && i % 20 === 0 &&  <HasMore />} */}
                                 <tr>
                                     <td>{r.id}</td>
                                     <td>{r.size}</td>
@@ -85,7 +111,7 @@ export default () => {
                                         Helpers.daysDiff(tnow, tdate, r.date)
                                     }</td>
                                 </tr>
-                                
+
                             </tbody>
 
                         )
@@ -99,8 +125,7 @@ export default () => {
     return (
 
         <>
-            {/* {state.loading ? <Spinner /> : (renderTable()) } */}
-            {Table()}
+          {state.loading ? <Spinner /> : <Table />}
         </>
     )
 }
