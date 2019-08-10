@@ -34,13 +34,13 @@ export default () => {
 
     useEffect(() => {
         getAscii(1, 20, dispatch , state.sortBy , false)
-        console.log('first use effect is run')
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     function handleScroll() {
-        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isFetching) return;
+        // if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isFetching) return;
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight  || isFetching )
         setIsFetching(true);
     }
 
@@ -52,14 +52,13 @@ export default () => {
 
 
     const fetchMoreListItems = ()=> {
-        // console.log('fetchMoreListItems runs')
         getAscii(state.page, 20, dispatch , state.sortBy , false)
         setTimeout(() => {
             setIsFetching(false);
-        }, 1500);
+        }, 2000);
     }
 
-    const addRender = (id) => {
+    const AddRender = (id) => {
         return (
             <tr>
                 <td>
@@ -74,7 +73,7 @@ export default () => {
 
 
 
-    const HasMore = () => (isFetching  && <td><Spinner /></td> )
+    const HasMore = () => (isFetching == true  && <td><Spinner /></td> )
     const EndOfcata = () => (state.more == false && <td>~ end of catalogue ~</td>)
 
     const Table = () => {
@@ -97,7 +96,7 @@ export default () => {
                         return (
 
                             <tbody key={r.id}>
-                                {i !== 0 && (i+1) % 20 === 0 && addRender(r.id)}
+                                {i !== 0 && (i+1) % 20 === 0 && <AddRender />}
                                 <tr>
                                     <td>{r.id}</td>
                                     <td>{r.size}</td>
@@ -125,8 +124,3 @@ export default () => {
         </>
     )
 }
-
-
-
-
-
