@@ -1,5 +1,5 @@
 import { Config } from '../utils/config'
-
+const keys = Array.from({ length: Config.ADS_LIMIT_ID }, (_, i) => i + 1)
 
 export const Helpers = {
     daysDiff(tnow, tdate, myDate) {
@@ -20,7 +20,9 @@ export const Helpers = {
             }).format(data);
            return event.toString("yyyyMM")
         }
-
-
+    },
+    randomAdsId(prevKey) {
+        const filter = keys.filter(k => k !== prevKey)
+        return filter[Math.floor(Math.random() * (filter.length))]
     }
 }
