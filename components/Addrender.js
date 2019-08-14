@@ -1,15 +1,15 @@
 import React from 'react'
 
-let cacheID = null
+let cacheID = []
 
 export default () => {
     let adNo = Math.floor(Math.random() * 1000)
 
 
-    while (cacheID === adNo) {
+    while (cacheID.includes(adNo)) {
         adNo = Math.floor(Math.random() * 1000)
     }
-    cacheID = adNo
+    cacheID.push(adNo)
 
     return (
         <tr>
