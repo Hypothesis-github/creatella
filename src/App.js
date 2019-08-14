@@ -20,9 +20,12 @@ export default () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    function handleScroll() {
-        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isFetching) return;
-        // if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50 || isFetching)
+
+
+
+      function handleScroll() {
+        // if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isFetching) return;
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50 || isFetching)
             setIsFetching(true);
     }
 
@@ -66,7 +69,7 @@ export default () => {
                             <tbody key={r.id}>
 
 
-                                {!state.loading && i && i % 20 === 0 ? <AddRender /> : null}
+                                {!state.loading && i && i % 20 === 0 ? AddRender() : null}
 
 
 
