@@ -20,8 +20,8 @@ export default () => {
     }, []);
 
     function handleScroll() {
-        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isFetching) return;
-        // if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50 || isFetching)
+        // if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isFetching) return;
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50 || isFetching)
         setIsFetching(true);
     }
 
@@ -33,18 +33,17 @@ export default () => {
 
 
     const fetchMoreListItems = () => {
-
+        getAscii(state.page, 20, dispatch, state.sortBy, false)
         setTimeout(() => {
-            getAscii(state.page, 20, dispatch, state.sortBy, false)
             setIsFetching(false);
-        }, 1000);
+        }, 2222);
     }
 
 
     return (
 
         <>
-            {state.loading || isFetching ? <table><tbody><tr><Spinner /></tr></tbody></table> : null}
+            {state.loading || isFetching ? <Spinner /> : null}
             <table className="container">
                 <thead>
                     <tr>
@@ -63,10 +62,12 @@ export default () => {
                         return (
 
                             <tbody key={r.id}>
-                                <tr>
-                                    {state.loading == false && i !== 0 && (i + 1) % 20 === 0 ? <AddRender id={r.id} /> : null}
-                                    {isFetching && i !== 0 && (i + 1) % 20 === 0 ? <Spinner /> : null}
-                                </tr>
+                                {/* <tr> */}
+                                
+                                    {state.loading == false && i  && i% 20 === 0 ? <AddRender id={r.id} /> : null}
+                                    {/* {isFetching && i !== 0 && (i + 1) % 20 === 0 ? <Spinner /> : null} */}
+                                    
+                                {/* </tr> */}
                                 <tr>
                                     <td>{r.id}</td>
                                     <td>{r.size}</td>
@@ -88,7 +89,7 @@ export default () => {
 
                 }
             </table>
-
+            {isFetching && <Spinner /> }
         </>
     )
 }

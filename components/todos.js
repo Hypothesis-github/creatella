@@ -1,5 +1,4 @@
 export const initialState = {
-    count: 1,
     loading: true,
     sortBy: null,
     data: [],

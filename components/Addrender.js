@@ -3,7 +3,7 @@ import { Helpers } from '../service/helpers'
 
 let adsId = {}
 let prevId = 0
-export default ({id}) => {
+export default ({ id }) => {
     let rdId = adsId[id]
     if (!rdId) {
         rdId = Helpers.randomAdsId(prevId)
@@ -12,11 +12,11 @@ export default ({id}) => {
         adsId[id] = rdId
     }
     return (
-
+        <tr>
             <td>
                 <img src={`/ads/?r=${rdId}`} />
-            </td>
-
+          </td>
+      </tr>
 
     )
 

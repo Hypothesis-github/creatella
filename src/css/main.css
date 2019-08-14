@@ -64,6 +64,7 @@
 
  table {
   table-layout:fixed;
+
  }
  
 
@@ -121,7 +122,9 @@
  }
 
  #loading {
-  display: inline-block;
+   position: absolute;
+   z-index: 1000;
+  display: flexbox;
   align-self: center;
   width: 50px;
   height: 50px;
