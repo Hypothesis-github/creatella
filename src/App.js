@@ -5,6 +5,7 @@ import './css/main.css'
 import { Helpers } from '../service/helpers'
 import Spinner from '../utils/Spinner'
 import AddRender from '../components/Addrender'
+import {Config} from '../utils/config'
 
 
 export default () => {
@@ -14,15 +15,15 @@ export default () => {
 
 
     useEffect(() => {
-        getAscii(1, 20, dispatch, state.sortBy, false)
+        getAscii(1, Config.ADS_PER_ROW, dispatch, state.sortBy, false)
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     function handleScroll() {
-        // if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isFetching) return;
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50 || isFetching)
-        setIsFetching(true);
+        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isFetching) return;
+        // if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50 || isFetching)
+            setIsFetching(true);
     }
 
     useEffect(() => {
@@ -33,24 +34,25 @@ export default () => {
 
 
     const fetchMoreListItems = () => {
-        getAscii(state.page, 20, dispatch, state.sortBy, false)
+        getAscii(state.page, Config.ADS_PER_ROW, dispatch, state.sortBy, false)
         setTimeout(() => {
             setIsFetching(false);
         }, 2222);
     }
 
 
+
     return (
 
         <>
-            {state.loading || isFetching ? <Spinner /> : null}
+            {state.loading  ? <Spinner /> : null}
             <table className="container">
                 <thead>
                     <tr>
-                        <th onClick={() => getAscii(1, 20, dispatch, 'id', true)} ><h1>{state.sortBy == 'id' && <p>Sorted by</p>} ID  </h1></th>
-                        <th onClick={() => getAscii(1, 20, dispatch, 'size', true)}><h1>{state.sortBy == 'size' && <p>Sorted by</p>}Size</h1></th>
+                        <th onClick={() => getAscii(1, Config.ADS_PER_ROW, dispatch, 'id', true)} ><h1>{state.sortBy == 'id' && <p>Sorted by</p>} ID  </h1></th>
+                        <th onClick={() => getAscii(1, Config.ADS_PER_ROW, dispatch, 'size', true)}><h1>{state.sortBy == 'size' && <p>Sorted by</p>}Size</h1></th>
                         <th><h1>Face</h1></th>
-                        <th onClick={() => getAscii(1, 20, dispatch, 'price', true)}><h1>{state.sortBy == 'price' && <p> Sorted by </p>} Price  </h1></th>
+                        <th onClick={() => getAscii(1, Config.ADS_PER_ROW, dispatch, 'price', true)}><h1>{state.sortBy == 'price' && <p> Sorted by </p>} Price  </h1></th>
                         <th><h1>Date</h1></th>
                     </tr>
                 </thead>
@@ -62,12 +64,12 @@ export default () => {
                         return (
 
                             <tbody key={r.id}>
-                                {/* <tr> */}
-                                
-                                    {state.loading == false && i  && i% 20 === 0 ? <AddRender id={r.id} /> : null}
-                                    {/* {isFetching && i !== 0 && (i + 1) % 20 === 0 ? <Spinner /> : null} */}
-                                    
-                                {/* </tr> */}
+
+
+                                {!state.loading && i && i % 20 === 0 ? <AddRender /> : null}
+
+
+
                                 <tr>
                                     <td>{r.id}</td>
                                     <td>{r.size}</td>
@@ -89,7 +91,7 @@ export default () => {
 
                 }
             </table>
-            {isFetching && <Spinner /> }
+            {isFetching && <Spinner />}
         </>
     )
 }

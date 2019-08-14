@@ -4,14 +4,17 @@ export const initialState = {
     data: [],
     preload: [],
     more: true,
-    page : 1
+    page : 1,
+    adNo : 1
 }
 
 export const reducer = (state , action) => {
 
     switch (action.type) {
         case "nomore":
-        return { ...state , more : false}
+        return { ...state , adNo : action.adNo}
+        case "randomAd":
+        return { ...state , loading : false }
         case "preLoadItems":
         return {...state ,page : (state.page + 1) , data : [...state.data, ...action.pre] , loading : true}
         case "loadingTrue":
@@ -20,6 +23,7 @@ export const reducer = (state , action) => {
         return { ...state , loading : false }
         case "resetandsort":
             return { ...state , data : [] , sortBy : action.model , page : 1 , loading : true }
+            
         
         default :
         return state

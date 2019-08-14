@@ -1,22 +1,23 @@
 import React from 'react'
 import { Helpers } from '../service/helpers'
 
-let adsId = {}
-let prevId = 0
-export default ({ id }) => {
-    let rdId = adsId[id]
-    if (!rdId) {
-        rdId = Helpers.randomAdsId(prevId)
+let cacheID = 0
+let adNo = Math.floor(Math.random() * 1000)
+export default () => {
 
-        prevId = rdId
-        adsId[id] = rdId
+
+    while (cacheID === adNo) {
+        adNo = Math.floor(Math.random() * 1000)
     }
+    console.log(cacheID, adNo)
+    cacheID = adNo
     return (
         <tr>
             <td>
-                <img src={`/ads/?r=${rdId}`} />
-          </td>
-      </tr>
+                <img src={`/ads/?r=${adNo}`} />
+                {adNo}
+            </td>
+        </tr>
 
     )
 
