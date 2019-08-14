@@ -2,23 +2,29 @@ import React from 'react'
 
 let cacheID = []
 
-export default () => {
-    let adNo = Math.floor(Math.random() * 1000)
-
-
-    while (cacheID.includes(adNo)) {
-        adNo = Math.floor(Math.random() * 1000)
+export default (id) => {
+let idNew = id.replace(/[^0-9]/g, '').substring(0,3)
+    while (cacheID.includes(idNew)) {
+        idNew = Math.floor(Math.random() * 1000)
     }
-    cacheID.push(adNo)
+    
+// console.log('page' , page , 'length' , cacheID.length , 'cacheID' , cacheID)
+console.log(idNew)
 
+    cacheID.push(idNew)
     return (
         <tr>
             <td>
-                <img src={`/ads/?r=${adNo}`} />
+
+                <img src={`/ads/?r=${idNew}`} />
             </td>
         </tr>
 
     )
+
+
+
+
 
 
 }

@@ -25,7 +25,7 @@ export default () => {
 
       function handleScroll() {
         // if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isFetching) return;
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50 || isFetching)
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && state.loading == true || isFetching)
             setIsFetching(true);
     }
 
@@ -69,7 +69,7 @@ export default () => {
                             <tbody key={r.id}>
 
 
-                                {!state.loading && i && i % 20 === 0 ? AddRender() : null}
+                                {!isFetching && i && i % 20 === 0 ? AddRender(r.id) : null}
 
 
 
