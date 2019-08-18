@@ -5,7 +5,8 @@ import './css/main.css'
 import { Helpers } from '../service/helpers'
 import Spinner from '../utils/Spinner'
 import AddRender from '../components/Addrender'
-import {Config} from '../utils/config'
+import { Config } from '../utils/config'
+
 
 
 export default () => {
@@ -20,35 +21,41 @@ export default () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-
-
-
-      function handleScroll() {
-        // if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isFetching) return;
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && state.loading == true || isFetching)
+    const handleScroll = () => {
+        if (
+            window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+            !isFetching
+        ) {
             setIsFetching(true);
-    }
+        } else {
+            setIsFetching(false);
+        }
+    };
 
-    useEffect(() => {
-        if (!isFetching) return;
-        fetchMoreListItems();
+    React.useEffect(() => {
+        isFetching && getAscii(state.page, Config.ADS_PER_ROW, dispatch, state.sortBy, false);
     }, [isFetching]);
 
 
 
-    const fetchMoreListItems = () => {
-        getAscii(state.page, Config.ADS_PER_ROW, dispatch, state.sortBy, false)
-        setTimeout(() => {
-            setIsFetching(false);
-        }, 2222);
-    }
+    const AddRender = (cb) => {
 
+        let idNew = cb()
+        return (
+            <tr>
+                <td>
+                    <img src={`/ads/?r=${idNew}`} />
+                </td>
+            </tr>
+
+        )
+    }
 
 
     return (
 
         <>
-            {state.loading  ? <Spinner /> : null}
+            {state.loading ? <Spinner /> : null}
             <table className="container">
                 <thead>
                     <tr>
@@ -69,7 +76,7 @@ export default () => {
                             <tbody key={r.id}>
 
 
-                                {!isFetching && i && i % 20 === 0 ? AddRender(r.id) : null}
+                                {!isFetching && i && i % 20 === 0 ? AddRender(Helpers.getRandom) : null}
 
 
 

@@ -1,3 +1,4 @@
+let cacheID = []
 export const Helpers = {
     daysDiff(tnow, tdate, myDate) {
 
@@ -17,5 +18,13 @@ export const Helpers = {
             }).format(data);
            return event.toString("yyyyMM")
         }
+    }, getRandom () {
+            let idNew = Math.floor(Math.random() * 1000)
+            while (cacheID.includes(idNew)) {
+                idNew = Math.floor(Math.random() * 1000)
+            }
+    
+            cacheID.push(idNew)
+            return cacheID[cacheID.length - 1]
     }
 }
